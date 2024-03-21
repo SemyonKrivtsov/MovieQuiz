@@ -88,7 +88,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             let text = "Ваш результат: \(correctAnswers)/\(questionsAmount)\n" +
                         "Количество сыгранных квизов: \(statisticService.gamesCount)\n" +
                         "Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(date))\n" +
-                        "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy ))%"
+                        "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
             
             let alertModel = AlertModel(
                 title: "Этот раунд окончен!",
