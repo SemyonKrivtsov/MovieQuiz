@@ -3,7 +3,15 @@ import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertDelegate {
     
-    // MARK: - Private property
+    // MARK: - IBOutlet
+    
+    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var textLabel: UILabel!
+    @IBOutlet private weak var counterLabel: UILabel!
+    @IBOutlet private weak var yesButton: UIButton!
+    @IBOutlet private weak var noButton: UIButton!
+    
+    // MARK: - Private Property
 
     private var questionFactory: QuestionFactoryProtocol?
     private var statisticService: StatisticService?
@@ -11,14 +19,45 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     private let questionsAmount: Int = 10
+    private var alertPresenter: AlertPresenter?
     
-    // MARK: - IBOutlets
+    // MARK: - Override
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
-    @IBOutlet private weak var imageView: UIImageView!
-    @IBOutlet private weak var textLabel: UILabel!
-    @IBOutlet private weak var counterLabel: UILabel!
-    @IBOutlet private weak var yesButton: UIButton!
-    @IBOutlet private weak var noButton: UIButton!
+    // MARK: - Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let questionFactory = QuestionFactory()
+        questionFactory.delegate = self
+        self.questionFactory = questionFactory
+        questionFactory.requestNextQuestion()
+        
+        statisticService = StatisticServiceImplementation()
+    }
+    
+    // MARK: - QuestionFactoryDelegate
+    
+    func didReceiveNextQuestion(question: QuizQuestion?) {
+        guard let question = question else { return }
+
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        DispatchQueue.main.async { [weak self] in
+            self?.show(quiz: viewModel)
+        }
+    }
+    
+    // MARK: - AlertDelegate
+    
+    func didReceiveAlert(alert: UIAlertController?) {
+        guard let alert = alert else { return }
+        present(alert, animated: true)
+    }
     
     // MARK: - IBActions
     
@@ -101,109 +140,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
                     guard let questionFactory = questionFactory else { return }
                     questionFactory.requestNextQuestion()
                 }
-            let alertPresenter = AlertPresenter(alertModel: alertModel)
-            alertPresenter.delegate = self
-            alertPresenter.show()
+            alertPresenter = AlertPresenter(alertModel: alertModel)
+            alertPresenter?.delegate = self
+            alertPresenter?.show()
         } else {
             guard let questionFactory = questionFactory else { return }
             currentQuestionIndex += 1
             questionFactory.requestNextQuestion()
         }
     }
-    
-    // MARK: - Lifecycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let questionFactory = QuestionFactory()
-        questionFactory.delegate = self
-        self.questionFactory = questionFactory
-        questionFactory.requestNextQuestion()
-        
-        statisticService = StatisticServiceImplementation()
-    }
-    
-    // MARK: - QuestionFactoryDelegate
-    
-    func didReceiveNextQuestion(question: QuizQuestion?) {
-        guard let question = question else { return }
-
-        currentQuestion = question
-        let viewModel = convert(model: question)
-        DispatchQueue.main.async { [weak self] in
-            self?.show(quiz: viewModel)
-        }
-    }
-    
-    // MARK: - AlertDelegate
-    
-    func didReceiveAlert(alert: UIAlertController?) {
-        guard let alert = alert else { return }
-        present(alert, animated: true)
-    }
 }
-
-/*
- Mock-данные
- 
- 
- Картинка: The Godfather
- Настоящий рейтинг: 9,2
- Вопрос: Рейтинг этого фильма больше чем 6?
- Ответ: ДА
-
-
- Картинка: The Dark Knight
- Настоящий рейтинг: 9
- Вопрос: Рейтинг этого фильма больше чем 6?
- Ответ: ДА
-
-
- Картинка: Kill Bill
- Настоящий рейтинг: 8,1
- Вопрос: Рейтинг этого фильма больше чем 6?
- Ответ: ДА
-
-
- Картинка: The Avengers
- Настоящий рейтинг: 8
- Вопрос: Рейтинг этого фильма больше чем 6?
- Ответ: ДА
-
-
- Картинка: Deadpool
- Настоящий рейтинг: 8
- Вопрос: Рейтинг этого фильма больше чем 6?
- Ответ: ДА
-
-
- Картинка: The Green Knight
- Настоящий рейтинг: 6,6
- Вопрос: Рейтинг этого фильма больше чем 6?
- Ответ: ДА
-
-
- Картинка: Old
- Настоящий рейтинг: 5,8
- Вопрос: Рейтинг этого фильма больше чем 6?
- Ответ: НЕТ
-
-
- Картинка: The Ice Age Adventures of Buck Wild
- Настоящий рейтинг: 4,3
- Вопрос: Рейтинг этого фильма больше чем 6?
- Ответ: НЕТ
-
-
- Картинка: Tesla
- Настоящий рейтинг: 5,1
- Вопрос: Рейтинг этого фильма больше чем 6?
- Ответ: НЕТ
-
-
- Картинка: Vivarium
- Настоящий рейтинг: 5,8
- Вопрос: Рейтинг этого фильма больше чем 6?
- Ответ: НЕТ
- */

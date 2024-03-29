@@ -9,33 +9,6 @@ import Foundation
 
 final class StatisticServiceImplementation: StatisticService {
     
-    // MARK: - Private property
-    private enum Keys: String {
-        case correct, total, bestGame, gamesCount
-    }
-    private let userDefaults = UserDefaults.standard
-    private var total: Int {
-        get {
-            let total = userDefaults.integer(forKey: Keys.total.rawValue)
-            return total
-        }
-        
-        set {
-            userDefaults.set(newValue, forKey: Keys.total.rawValue)
-        }
-    }
-    
-    private var correct: Int {
-        get {
-            let correct = userDefaults.integer(forKey: Keys.correct.rawValue)
-            return correct
-        }
-        
-        set {
-            userDefaults.set(newValue, forKey: Keys.correct.rawValue)
-        }
-    }
-    
     // MARK: - Internal property StatisticService
     var totalAccuracy: Double {
         
@@ -70,6 +43,33 @@ final class StatisticServiceImplementation: StatisticService {
             }
 
             userDefaults.set(data, forKey: Keys.bestGame.rawValue)
+        }
+    }
+    
+    // MARK: - Private property
+    private enum Keys: String {
+        case correct, total, bestGame, gamesCount
+    }
+    private let userDefaults = UserDefaults.standard
+    private var total: Int {
+        get {
+            let total = userDefaults.integer(forKey: Keys.total.rawValue)
+            return total
+        }
+        
+        set {
+            userDefaults.set(newValue, forKey: Keys.total.rawValue)
+        }
+    }
+    
+    private var correct: Int {
+        get {
+            let correct = userDefaults.integer(forKey: Keys.correct.rawValue)
+            return correct
+        }
+        
+        set {
+            userDefaults.set(newValue, forKey: Keys.correct.rawValue)
         }
     }
     

@@ -9,11 +9,11 @@ import UIKit
 
 final class AlertPresenter {
     
-    // MARK: - Private property
-    private var alertModel: AlertModel
-    
     // MARK: - Internal property
     weak var delegate: AlertDelegate?
+    
+    // MARK: - Private property
+    private var alertModel: AlertModel
     
     // MARK: - Initialization
     init(alertModel: AlertModel) {
