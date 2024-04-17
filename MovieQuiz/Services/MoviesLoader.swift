@@ -13,7 +13,7 @@ protocol MoviesLoading {
 
 struct MoviesLoader: MoviesLoading {
     // MARK: - NetworkClient
-    private let networkClient = NetworkClient()
+    private let networkClient: NetworkRouting
         
     // MARK: - URL
     private var mostPopularMoviesUrl: URL {
@@ -21,6 +21,11 @@ struct MoviesLoader: MoviesLoading {
             preconditionFailure("Unable to construct mostPopularMoviesUrl")
         }
         return url
+    }
+    
+    // MARK: - Initialize
+    init(networkClient: NetworkRouting = NetworkClient()) {
+        self.networkClient = networkClient
     }
     
     func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void) {
