@@ -40,7 +40,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
             guard let movie = self.movies[safe: index] else { return }
             
             var imageData = Data()
-           
+            
             do {
                 imageData = try Data(contentsOf: movie.resizedImageURL)
             } catch {
@@ -59,8 +59,8 @@ final class QuestionFactory: QuestionFactoryProtocol {
             let correctAnswer = randomBool ? rating > Float(randomRating) : rating < Float(randomRating)
             
             let question = QuizQuestion(image: imageData,
-                                         text: text,
-                                         correctAnswer: correctAnswer)
+                                        text: text,
+                                        correctAnswer: correctAnswer)
             
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
