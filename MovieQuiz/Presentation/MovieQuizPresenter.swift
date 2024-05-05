@@ -8,7 +8,7 @@
 import UIKit
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
-
+    
     // MARK: - Private Property
     private var currentQuestion: QuizQuestion?
     private let questionsAmount: Int = 10
@@ -17,14 +17,16 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private weak var viewController: MovieQuizViewControllerProtocol?
     private var questionFactory: QuestionFactoryProtocol?
     private var statisticService: StatisticService
-    private var alertPresenter: AlertPresenter!
+    private var alertPresenter: AlertPresenter?
     
     // MARK: - Initialization
-    init(viewController: MovieQuizViewControllerProtocol) {
+    init(viewController: MovieQuizViewControllerProtocol,
+         statisticService: StatisticService,
+         alertPresenter: AlertPresenter
+    ) {
         self.viewController = viewController
-        
-        statisticService = StatisticServiceImplementation()
-        alertPresenter = AlertPresenter()
+        self.statisticService = statisticService
+        self.alertPresenter = alertPresenter
         
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.loadData()
@@ -42,9 +44,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     func convert(model: QuizQuestion) -> QuizStepViewModel {
         
-        
         let image = model.image.isEmpty ? UIImage() : UIImage(data: model.image) ?? UIImage()
-            
+        
         let questionStep = QuizStepViewModel(
             image: image,
             question: model.text,
@@ -55,9 +56,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     // MARK: - QuestionFactoryDelegate
     func didReceiveNextQuestion(question: QuizQuestion?) {
         guard let question = question else {
-                    return
-                }
-                
+            return
+        }
+        
+        viewController?.hideLoadingIndicator()
+        
         currentQuestion = question
         let viewModel = convert(model: question)
         DispatchQueue.main.async { [weak self] in
@@ -68,7 +71,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     func didLoadDataFromServer() {
         viewController?.showLoadingIndicator()
         questionFactory?.requestNextQuestion()
-        viewController?.hideLoadingIndicator()
     }
     
     func didFailToLoadData(with error: any Error) {
@@ -117,9 +119,9 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         statisticService.store(correct: correctAnswers, total: questionsAmount)
         let date = statisticService.bestGame.date.dateTimeString
         let text = "Ваш результат: \(correctAnswers)/\(questionsAmount)\n" +
-                    "Количество сыгранных квизов: \(statisticService.gamesCount)\n" +
-                    "Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(date))\n" +
-                    "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
+        "Количество сыгранных квизов: \(statisticService.gamesCount)\n" +
+        "Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(date))\n" +
+        "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
         let alertModel = AlertModel(
             title: "Этот раунд окончен!",
             message: text,
@@ -141,6 +143,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         if isLastQuestion() {
             let alertModel = makeResultsModel()
             guard let viewController = viewController as? AlertDelegate else { return }
+            guard let alertPresenter = alertPresenter else { return }
             alertPresenter.show(in: viewController, model: alertModel)
         } else {
             guard let questionFactory = questionFactory else { return }
@@ -162,10 +165,12 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             message: message,
             buttonText: "Попробовать ещё раз") {[weak self] _ in
                 guard let self = self else { return }
-                        
+                
                 self.restartGame()
             }
         guard let viewController = viewController as? AlertDelegate else { return }
+        
+        guard let alertPresenter = alertPresenter else { return }
         alertPresenter.show(in: viewController, model: alertModel)
     }
     

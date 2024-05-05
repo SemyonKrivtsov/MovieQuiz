@@ -12,7 +12,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     
     // MARK: - Private Property
-    private var presenter: MovieQuizPresenter!
+    private var presenter: MovieQuizPresenter?
     
     // MARK: - Override
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -23,7 +23,13 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presenter = MovieQuizPresenter(viewController: self)
+        let statisticService = StatisticServiceImplementation()
+        let alertPresenter = AlertPresenter()
+        
+        presenter = MovieQuizPresenter(viewController: self,
+                                       statisticService: statisticService,
+                                       alertPresenter: alertPresenter
+        )
         
         activityIndicator.hidesWhenStopped = true
         showLoadingIndicator()
@@ -67,10 +73,10 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     
     // MARK: - IBActions
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        presenter.yesButtonClicked()
+        presenter?.yesButtonClicked()
     }
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        presenter.noButtonClicked()
+        presenter?.noButtonClicked()
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		851086B72BE7D26B00573E0B /* Tokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851086B62BE7D26B00573E0B /* Tokens.swift */; };
 		857092392BD036040061E733 /* MovieQuizPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 857092382BD036040061E733 /* MovieQuizPresenter.swift */; };
 		8570923B2BD247290061E733 /* MovieQuizViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8570923A2BD247290061E733 /* MovieQuizViewControllerProtocol.swift */; };
 		8570923D2BD247FA0061E733 /* MovieQuizPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8570923C2BD247FA0061E733 /* MovieQuizPresenterTests.swift */; };
@@ -59,6 +60,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		851086B62BE7D26B00573E0B /* Tokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokens.swift; sourceTree = "<group>"; };
 		857092382BD036040061E733 /* MovieQuizPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieQuizPresenter.swift; sourceTree = "<group>"; };
 		8570923A2BD247290061E733 /* MovieQuizViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieQuizViewControllerProtocol.swift; sourceTree = "<group>"; };
 		8570923C2BD247FA0061E733 /* MovieQuizPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieQuizPresenterTests.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				85F8BCFA2BB9C4F6004E3C91 /* NetworkClient.swift */,
 				85F8BCFE2BB9E406004E3C91 /* MoviesLoader.swift */,
 				8594FAE62BCDA6230084C4F1 /* StubNetworkClient.swift */,
+				851086B62BE7D26B00573E0B /* Tokens.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -401,6 +404,7 @@
 				85F8BCFF2BB9E406004E3C91 /* MoviesLoader.swift in Sources */,
 				85CF8BBF2BA6143100001AE6 /* QuestionFactoryProtocol.swift in Sources */,
 				85CF8BC12BA6C7F600001AE6 /* QuestionFactoryDelegate.swift in Sources */,
+				851086B72BE7D26B00573E0B /* Tokens.swift in Sources */,
 				AD1ABAB62831907B00B3E448 /* MovieQuizViewController.swift in Sources */,
 				85CF8BCB2BA9DA5200001AE6 /* StatisticService.swift in Sources */,
 				85CF8BB92BA5FFDD00001AE6 /* QuizStepViewModel.swift in Sources */,
