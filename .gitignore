@@ -3,5 +3,5 @@
 /Packages
 xcuserdata/
 DerivedData/
-MovieQuiz/Services/Tokens.swift
+*Tokens.swift
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
